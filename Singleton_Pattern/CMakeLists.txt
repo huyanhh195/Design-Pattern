@@ -9,4 +9,4 @@ set(SOURCES main.cpp)
 
 include_directories(include)
 
-add_executable($(PROJECT_NAME) ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})

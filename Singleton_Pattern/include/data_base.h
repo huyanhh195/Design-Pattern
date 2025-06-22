@@ -1,13 +1,15 @@
-
 #pragma once
+
 #include <iostream>
 #include <string>
+#include <mutex>
 
 class DataBase {
 private:
     std::string m_name;
     int m_record;
-    static DataBase* m_intance_ptr;  
+    static DataBase* m_instance_ptr;  
+    static std::mutex m_mutex;
 
     DataBase(std::string name){
         m_name = name;
@@ -31,10 +33,17 @@ public:
     }
 
     static DataBase* get_instance(std::string name){
-        if (m_intance_ptr == nullptr){
-            m_intance_ptr = new DataBase(name);
+        m_mutex.lock();
+
+        if (m_instance_ptr == nullptr){
+            m_instance_ptr = new DataBase(name);
         }
 
-        return m_intance_ptr;
+        m_mutex.unlock();
+
+        return m_instance_ptr;
     }
-}
+};
+
+DataBase* DataBase::m_instance_ptr = nullptr;
+std::mutex DataBase::m_mutex;
